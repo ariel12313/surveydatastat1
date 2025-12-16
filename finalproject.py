@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
 from scipy.stats import pearsonr, spearmanr, shapiro
 
 # =====================
@@ -118,22 +117,21 @@ if uploaded_file:
         st.write(f"**{T['pval']}**: {pval:.4f}")
 
         # =====================
-        # Visualization (Matplotlib)
+        # Visualization (Streamlit Built-in Scatter Chart)
         # =====================
-        fig, ax = plt.subplots(figsize=(10, 6))
-        ax.scatter(data[col_x], data[col_y], alpha=0.6, edgecolors='k', s=50)
-        ax.set_xlabel(col_x, fontsize=12)
-        ax.set_ylabel(col_y, fontsize=12)
-        ax.set_title(f"{col_x} vs {col_y}", fontsize=14, fontweight='bold')
-        ax.grid(True, alpha=0.3)
+        st.subheader(f"📈 Scatter Plot: {col_x} vs {col_y}")
         
-        # Add trend line
-        z = np.polyfit(data[col_x], data[col_y], 1)
-        p = np.poly1d(z)
-        ax.plot(data[col_x], p(data[col_x]), "r--", alpha=0.8, linewidth=2, label='Trend Line')
-        ax.legend()
+        # Prepare data for scatter chart
+        chart_data = data[[col_x, col_y]].copy()
         
-        st.pyplot(fig)
+        # Use Streamlit's native scatter_chart
+        st.scatter_chart(
+            chart_data,
+            x=col_x,
+            y=col_y,
+            size=20,
+            color='#FF4B4B'
+        )
         
         # =====================
         # Description
